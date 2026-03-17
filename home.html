@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naropil Children Foundation | Empowering Children, Transforming Lives</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#005b96',
+                            blueDark: '#013a63',
+                            green: '#2a9d8f',
+                            greenDark: '#21867a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom UI behaviors */
+        .page-section { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .page-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Toast notification */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 50; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 12px 20px; border-radius: 8px; color: white; font-weight: 500; box-shadow: 0 4px 6px rgba(0,0,0,0.1); opacity: 0; transform: translateX(100%); transition: all 0.3s ease; }
+        .toast.show { opacity: 1; transform: translateX(0); }
+        .toast.success { background-color: #2a9d8f; }
+        .toast.error { background-color: #e76f51; }
+        
+        /* Loading Spinner */
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid white; width: 20px; height: 20px; -webkit-animation: spin 1s linear infinite; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; display: none;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        button.loading .loader { display: inline-block; }
+        button.loading .btn-text { display: none; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <header class="bg-white shadow-md sticky top-0 z-40 w-full">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigate('home')">
+                <!-- Simple Logo using CSS shapes -->
+                <div class="w-10 h-10 bg-brand-blue rounded-full flex items-center justify-center text-white font-serif font-bold text-xl">N</div>
+                <div class="hidden sm:block">
+                    <h1 class="font-bold text-brand-blueDark text-lg leading-tight">Naropil Children</h1>
+                    <p class="text-xs text-brand-green font-semibold tracking-wider">FOUNDATION</p>
+                </div>
+            </div>
+
+            <!-- Desktop Menu -->
+            <nav class="hidden md:flex items-center gap-6 font-medium text-sm text-gray-600">
+                <a href="#" onclick="navigate('home')" class="hover:text-brand-blue transition">Home</a>
+                <a href="#" onclick="navigate('about')" class="hover:text-brand-blue transition">About</a>
+                <a href="#" onclick="navigate('programs')" class="hover:text-brand-blue transition">Programs</a>
+                <a href="#" onclick="navigate('impact')" class="hover:text-brand-blue transition">Impact</a>
+                <a href="#" onclick="navigate('gallery')" class="hover:text-brand-blue transition">Gallery</a>
+                <a href="#" onclick="navigate('contact')" class="hover:text-brand-blue transition">Contact</a>
+                <button onclick="navigate('donate')" class="bg-brand-green hover:bg-brand-greenDark text-white px-5 py-2 rounded-full shadow-md transition transform hover:-translate-y-0.5">Donate Now</button>
+            </nav>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-gray-600 text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 flex flex-col gap-4 text-center absolute w-full shadow-lg">
+            <a href="#" onclick="navigate('home')" class="block font-medium">Home</a>
+            <a href="#" onclick="navigate('about')" class="block font-medium">About</a>
+            <a href="#" onclick="navigate('programs')" class="block font-medium">Programs</a>
+            <button onclick="navigate('donate')" class="w-full bg-brand-green text-white py-2 rounded-full font-medium">Donate</button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow">
+        
+        <!-- 1. HOME PAGE -->
+        <section id="home" class="page-section active">
+            <!-- Hero -->
+            <div class="relative bg-brand-blueDark text-white pt-24 pb-32 px-4 overflow-hidden">
+                <div class="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center"></div>
+                <div class="container mx-auto relative z-10 text-center max-w-3xl">
+                    <span class="bg-brand-green text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4 inline-block">Empowering Children</span>
+                    <h2 class="text-4xl md:text-6xl font-serif font-bold mb-6 leading-tight">Transforming Lives in Kenya</h2>
+                    <p class="text-lg md:text-xl text-blue-100 mb-8">Join the Naropil Children Foundation in providing education, healthcare, and hope to vulnerable children.</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4">
+                        <button onclick="navigate('donate')" class="bg-brand-green hover:bg-brand-greenDark px-8 py-3 rounded-full font-bold text-lg shadow-lg transition">Make a Donation</button>
+                        <button onclick="navigate('volunteer')" class="bg-white/10 hover:bg-white/20 border border-white/50 px-8 py-3 rounded-full font-bold text-lg backdrop-blur-sm transition">Become a Volunteer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats/Features -->
+            <div class="container mx-auto px-4 -mt-12 relative z-20">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center">
+                        <div class="w-12 h-12 bg-blue-100 text-brand-blue rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fas fa-book-open"></i></div>
+                        <h3 class="font-bold text-xl mb-2">Education First</h3>
+                        <p class="text-gray-600 text-sm">Providing school fees, uniforms, and supplies to ensure no child is left behind.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center">
+                        <div class="w-12 h-12 bg-green-100 text-brand-green rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fas fa-heartbeat"></i></div>
+                        <h3 class="font-bold text-xl mb-2">Healthcare Access</h3>
+                        <p class="text-gray-600 text-sm">Medical camps, health insurance, and nutritional support for growing children.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-100 text-center">
+                        <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-xl mx-auto mb-4"><i class="fas fa-hands-helping"></i></div>
+                        <h3 class="font-bold text-xl mb-2">Mentorship</h3>
+                        <p class="text-gray-600 text-sm">Guidance, career planning, and emotional support to build resilient youth.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. ABOUT PAGE -->
+        <section id="about" class="page-section container mx-auto px-4 py-16">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl font-serif font-bold text-brand-blueDark mb-6 text-center">About Naropil Children Foundation</h2>
+                <div class="bg-white rounded-xl shadow-md p-8 text-gray-700 leading-relaxed mb-8 border-t-4 border-brand-green">
+                    <p class="mb-4">Naropil Children Foundation is a non-profit organization dedicated to transforming the lives of vulnerable children. We believe that every child deserves a fair chance at life, regardless of their background.</p>
+                    <p class="mb-4">Founded on the principle of compassion, our mission is to break the cycle of poverty through holistic interventions targeting education, health, and social welfare.</p>
+                    <h3 class="text-xl font-bold text-brand-blue mt-8 mb-3">Our Mission</h3>
+                    <p class="mb-4">To empower disadvantaged children and youth to reach their full potential by providing access to quality education, healthcare, and psycho-social support.</p>
+                    <h3 class="text-xl font-bold text-brand-blue mt-8 mb-3">Our Vision</h3>
+                    <p>A society where every child is empowered, educated, and equipped to become a responsible, self-reliant global citizen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DONATE PAGE (M-PESA Integration) -->
+        <section id="donate" class="page-section container mx-auto px-4 py-16">
+            <div class="max-w-lg mx-auto bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+                <div class="bg-brand-green p-6 text-white text-center">
+                    <h2 class="text-3xl font-serif font-bold mb-2">Support a Child</h2>
+                    <p class="text-green-100 text-sm">Your contribution changes lives directly.</p>
+                </div>
+                <div class="p-8">
+                    <form id="donateForm" onsubmit="handleDonation(event)">
+                        <div class="mb-6 flex gap-3">
+                            <button type="button" class="flex-1 py-2 border-2 border-brand-green bg-green-50 text-brand-green font-bold rounded-lg"><i class="fas fa-mobile-alt mr-2"></i> M-Pesa</button>
+                            <button type="button" class="flex-1 py-2 border border-gray-200 text-gray-500 rounded-lg hover:bg-gray-50 opacity-50 cursor-not-allowed" title="Coming Soon">Card / PayPal</button>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                                <input type="text" id="don_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">M-Pesa Phone Number</label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-2.5 text-gray-500">+254</span>
+                                    <input type="tel" id="don_phone" required placeholder="7XXXXXXXX" class="w-full pl-14 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                                </div>
+                                <p class="text-xs text-gray-500 mt-1">Enter number that will receive the STK push.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Amount (KES)</label>
+                                <input type="number" id="don_amount" required min="10" placeholder="e.g. 1000" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                            </div>
+                            
+                            <button type="submit" id="btn-donate" class="w-full bg-brand-blue hover:bg-brand-blueDark text-white font-bold py-3 px-4 rounded-lg shadow transition mt-4">
+                                <span class="btn-text">Donate via M-Pesa</span>
+                                <div class="loader"></div>
+                            </button>
+                        </div>
+                    </form>
+                    <div id="mpesa-instructions" class="hidden mt-6 bg-blue-50 p-4 rounded-lg text-sm text-brand-blue border border-blue-100">
+                        <p class="font-bold"><i class="fas fa-spinner fa-spin mr-2"></i> Awaiting Payment...</p>
+                        <p class="mt-1">1. Check your phone for an M-Pesa prompt.<br>2. Enter your M-Pesa PIN.<br>3. Once complete, you will receive an SMS confirmation.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CONTACT PAGE -->
+        <section id="contact" class="page-section container mx-auto px-4 py-16">
+            <div class="max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
+                <div class="w-full md:w-1/3 bg-brand-blueDark text-white p-8 rounded-xl shadow-lg">
+                    <h3 class="text-2xl font-serif font-bold mb-6">Get In Touch</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-map-marker-alt text-brand-green mt-1 text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-300">Office</h4>
+                                <p>Nairobi, Kenya</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-phone-alt text-brand-green mt-1 text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-300">Phone</h4>
+                                <p>0722523591</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <i class="fas fa-envelope text-brand-green mt-1 text-xl"></i>
+                            <div>
+                                <h4 class="font-bold text-sm text-gray-300">Email</h4>
+                                <p class="text-sm">naropilchildrenfoundation<br>@gmail.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="w-full md:w-2/3 bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Send us a message</h3>
+                    <form id="contactForm" onsubmit="submitContact(event)">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                                <input type="text" id="contact_name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-brand-blue outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <input type="email" id="contact_email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-brand-blue outline-none">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                            <input type="text" id="contact_subject" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-brand-blue outline-none">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                            <textarea id="contact_message" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-brand-blue outline-none"></textarea>
+                        </div>
+                        <button type="submit" id="btn-contact" class="bg-brand-blue hover:bg-brand-blueDark text-white font-bold py-2 px-6 rounded-lg shadow transition">
+                            <span class="btn-text">Send Message</span>
+                            <div class="loader"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. ADMIN LOGIN -->
+        <section id="admin-login" class="page-section container mx-auto px-4 py-24">
+            <div class="max-w-md mx-auto bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-brand-blueDark rounded-full flex items-center justify-center text-white mx-auto mb-3"><i class="fas fa-lock"></i></div>
+                    <h2 class="text-2xl font-bold text-gray-800">Admin Portal</h2>
+                    <p class="text-sm text-gray-500">Authorized personnel only</p>
+                </div>
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="login_email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="login_password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none">
+                    </div>
+                    <button type="submit" id="btn-login" class="w-full bg-gray-800 hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-lg shadow transition">
+                        <span class="btn-text">Login to Dashboard</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 6. ADMIN DASHBOARD (Protected) -->
+        <section id="dashboard" class="page-section bg-gray-100 min-h-screen">
+            <!-- Admin Header -->
+            <div class="bg-brand-blueDark text-white p-4 shadow-md flex justify-between items-center">
+                <h2 class="font-bold text-xl"><i class="fas fa-shield-alt mr-2"></i> Foundation Dashboard</h2>
+                <div class="flex items-center gap-4">
+                    <span id="admin-name" class="text-sm text-blue-200">Admin</span>
+                    <button onclick="logout()" class="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm transition">Logout</button>
+                </div>
+            </div>
+
+            <div class="container mx-auto px-4 py-8">
+                <!-- Stats Row -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-brand-green">
+                        <p class="text-sm text-gray-500 font-medium uppercase">Total Donations</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="stat-donations">KES 0</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-brand-blue">
+                        <p class="text-sm text-gray-500 font-medium uppercase">Unread Messages</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1" id="stat-messages">0</h3>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow border-l-4 border-orange-400">
+                        <p class="text-sm text-gray-500 font-medium uppercase">Active Programs</p>
+                        <h3 class="text-3xl font-bold text-gray-800 mt-1">4</h3>
+                    </div>
+                </div>
+
+                <!-- Tables Row -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Recent Donations -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="bg-gray-50 p-4 border-b">
+                            <h3 class="font-bold text-gray-700">Recent M-Pesa Donations</h3>
+                        </div>
+                        <div class="p-0 overflow-x-auto">
+                            <table class="w-full text-left text-sm text-gray-600">
+                                <thead class="bg-gray-50 text-gray-500 uppercase">
+                                    <tr><th class="p-3">Name</th><th class="p-3">Amount</th><th class="p-3">Status</th></tr>
+                                </thead>
+                                <tbody id="table-donations" class="divide-y divide-gray-100">
+                                    <!-- Populated by JS -->
+                                    <tr><td colspan="3" class="p-4 text-center text-gray-400">Loading data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Recent Messages -->
+                    <div class="bg-white rounded-lg shadow overflow-hidden">
+                        <div class="bg-gray-50 p-4 border-b">
+                            <h3 class="font-bold text-gray-700">Recent Messages</h3>
+                        </div>
+                        <div class="p-0 overflow-x-auto">
+                            <table class="w-full text-left text-sm text-gray-600">
+                                <thead class="bg-gray-50 text-gray-500 uppercase">
+                                    <tr><th class="p-3">From</th><th class="p-3">Subject</th><th class="p-3">Date</th></tr>
+                                </thead>
+                                <tbody id="table-messages" class="divide-y divide-gray-100">
+                                    <!-- Populated by JS -->
+                                    <tr><td colspan="3" class="p-4 text-center text-gray-400">Loading data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Stub sections for routing -->
+        <section id="programs" class="page-section container mx-auto px-4 py-16 text-center"><h2 class="text-3xl font-bold mb-4">Our Programs</h2><p>Content for programs...</p></section>
+        <section id="impact" class="page-section container mx-auto px-4 py-16 text-center"><h2 class="text-3xl font-bold mb-4">Our Impact</h2><p>Content for impact...</p></section>
+        <section id="gallery" class="page-section container mx-auto px-4 py-16 text-center"><h2 class="text-3xl font-bold mb-4">Gallery</h2><p>Content for gallery...</p></section>
+        <section id="volunteer" class="page-section container mx-auto px-4 py-16 text-center"><h2 class="text-3xl font-bold mb-4">Volunteer</h2><p>Content for volunteer form...</p></section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="bg-gray-900 text-gray-300 py-12 border-t-4 border-brand-green">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4 font-serif">Naropil Children Foundation</h3>
+                <p class="text-sm leading-relaxed mb-4">Empowering disadvantaged children through education and holistic care. Together, we can transform lives.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-blue transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-blue transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center hover:bg-brand-blue transition"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Quick Links</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#" onclick="navigate('about')" class="hover:text-brand-green transition">About Us</a></li>
+                    <li><a href="#" onclick="navigate('programs')" class="hover:text-brand-green transition">Our Programs</a></li>
+                    <li><a href="#" onclick="navigate('donate')" class="hover:text-brand-green transition">Donate</a></li>
+                    <li><a href="#" onclick="navigate('admin-login')" class="hover:text-brand-green transition">Admin Login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4">Contact</h3>
+                <ul class="space-y-2 text-sm">
+                    <li><i class="fas fa-map-marker-alt w-5 text-brand-green"></i> Nairobi, Kenya</li>
+                    <li><i class="fas fa-phone w-5 text-brand-green"></i> 0722523591</li>
+                    <li><i class="fas fa-envelope w-5 text-brand-green"></i> naropilchildrenfoundation@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="container mx-auto px-4 mt-8 pt-8 border-t border-gray-800 text-center text-xs text-gray-500">
+            &copy; 2024 Naropil Children Foundation. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Application Logic -->
+    <script>
+        // CONFIGURATION
+        // In production, change this to your deployed backend URL
+        const API_URL = 'http://localhost:5000/api'; 
+
+        // ROUTING SYSTEM (Vanilla JS SPA)
+        function navigate(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+            
+            // Handle footer visibility
+            const footer = document.getElementById('main-footer');
+            if(pageId === 'dashboard') footer.style.display = 'none';
+            else footer.style.display = 'block';
+
+            // Show target page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+
+            // Trigger specific page logic
+            if (pageId === 'dashboard') loadDashboardData();
+        }
+
+        // TOAST NOTIFICATIONS
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i> ${message}`;
+            
+            container.appendChild(toast);
+            
+            // Trigger animation
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // BUTTON LOADER HELPER
+        function setLoading(btnId, isLoading) {
+            const btn = document.getElementById(btnId);
+            if(isLoading) {
+                btn.classList.add('loading');
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('loading');
+                btn.disabled = false;
+            }
+        }
+
+        // CONTACT FORM SUBMISSION
+        async function submitContact(e) {
+            e.preventDefault();
+            setLoading('btn-contact', true);
+            
+            const payload = {
+                name: document.getElementById('contact_name').value,
+                email: document.getElementById('contact_email').value,
+                subject: document.getElementById('contact_subject').value,
+                message: document.getElementById('contact_message').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/messages`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if(!res.ok) throw new Error('Failed to send message');
+                
+                showToast('Message sent successfully! We will get back to you soon.');
+                document.getElementById('contactForm').reset();
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                setLoading('btn-contact', false);
+            }
+        }
+
+        // DONATION SUBMISSION (M-PESA)
+        async function handleDonation(e) {
+            e.preventDefault();
+            setLoading('btn-donate', true);
+            
+            const payload = {
+                name: document.getElementById('don_name').value,
+                phone: document.getElementById('don_phone').value,
+                amount: document.getElementById('don_amount').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/mpesa/stkpush`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                
+                if(!res.ok) throw new Error(data.error || 'Failed to initiate payment');
+                
+                showToast('M-Pesa prompt sent to your phone!');
+                document.getElementById('mpesa-instructions').classList.remove('hidden');
+                document.getElementById('btn-donate').style.display = 'none';
+                
+            } catch (err) {
+                showToast(err.message, 'error');
+                setLoading('btn-donate', false);
+            }
+        }
+
+        // ADMIN LOGIN
+        async function handleLogin(e) {
+            e.preventDefault();
+            setLoading('btn-login', true);
+            
+            const payload = {
+                email: document.getElementById('login_email').value,
+                password: document.getElementById('login_password').value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                if(!res.ok) throw new Error(data.error || 'Login failed');
+                
+                // Save token
+                localStorage.setItem('ngo_admin_token', data.token);
+                showToast('Login successful!');
+                navigate('dashboard');
+                
+            } catch (err) {
+                showToast(err.message, 'error');
+            } finally {
+                setLoading('btn-login', false);
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('ngo_admin_token');
+            navigate('home');
+            showToast('Logged out successfully');
+        }
+
+        // DASHBOARD DATA FETCHING
+        async function loadDashboardData() {
+            const token = localStorage.getItem('ngo_admin_token');
+            if(!token) {
+                navigate('admin-login');
+                showToast('Please login first', 'error');
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}/admin/dashboard`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if(res.status === 401 || res.status === 403) {
+                    logout();
+                    return;
+                }
+                
+                const data = await res.json();
+                
+                // Update stats
+                document.getElementById('stat-donations').innerText = `KES ${Number(data.stats.totalDonations).toLocaleString()}`;
+                document.getElementById('stat-messages').innerText = data.stats.unreadMessages;
+                
+                // Update Donations Table
+                const donTbody = document.getElementById('table-donations');
+                donTbody.innerHTML = '';
+                if(data.recentDonations.length === 0) donTbody.innerHTML = '<tr><td colspan="3" class="p-3">No recent donations</td></tr>';
+                data.recentDonations.forEach(d => {
+                    const statusClass = d.status === 'completed' ? 'text-green-600 bg-green-100' : (d.status === 'pending' ? 'text-orange-600 bg-orange-100' : 'text-red-600 bg-red-100');
+                    donTbody.innerHTML += `
+                        <tr class="border-b">
+                            <td class="p-3">${d.name} <br><span class="text-xs text-gray-400">${d.phone}</span></td>
+                            <td class="p-3 font-medium">KES ${d.amount}</td>
+                            <td class="p-3"><span class="px-2 py-1 rounded text-xs ${statusClass}">${d.status}</span></td>
+                        </tr>
+                    `;
+                });
+
+                // Update Messages Table
+                const msgTbody = document.getElementById('table-messages');
+                msgTbody.innerHTML = '';
+                if(data.recentMessages.length === 0) msgTbody.innerHTML = '<tr><td colspan="3" class="p-3">No recent messages</td></tr>';
+                data.recentMessages.forEach(m => {
+                    const date = new Date(m.created_at).toLocaleDateString();
+                    msgTbody.innerHTML += `
+                        <tr class="border-b">
+                            <td class="p-3">${m.name} <br><span class="text-xs text-gray-400">${m.email}</span></td>
+                            <td class="p-3">${m.subject || 'No Subject'}</td>
+                            <td class="p-3 text-xs">${date}</td>
+                        </tr>
+                    `;
+                });
+
+            } catch (err) {
+                showToast('Failed to load dashboard data', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

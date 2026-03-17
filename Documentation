@@ -1,0 +1,66 @@
+Naropil Children Foundation - Full Stack System
+
+A complete, production-ready full-stack application customized for an NGO.
+
+Architecture Highlights
+
+Strict Separation: The backend (server.js) and frontend (index.html) are completely decoupled. The frontend communicates with the backend solely via REST API endpoints.
+
+No Frontend Framework: The frontend uses pure vanilla JavaScript to create a lightning-fast Single Page Application (SPA), styled cleanly with Tailwind CSS.
+
+M-Pesa Integrated: Safaricom Daraja API logic is built into the backend (/api/mpesa/stkpush & /api/mpesa/callback) to securely handle donations.
+
+Security: JWT Authentication, bcrypt password hashing, parameterized SQL queries, and CORS configuration.
+
+Setup Instructions
+
+1. Database Setup
+
+Ensure MySQL is running on your system.
+
+Execute the schema.sql file in your MySQL environment to create the naropil_db database, tables, and the default admin user.
+
+2. Backend Setup
+
+Create a new folder named server.
+
+Move server.js and .env.example into this folder.
+
+Rename .env.example to .env and fill in your actual database credentials and Safaricom M-Pesa sandbox/production keys.
+
+Initialize Node and install dependencies:
+
+npm init -y
+npm install express cors dotenv mysql2 bcryptjs jsonwebtoken axios helmet
+
+
+Start the server:
+
+node server.js
+
+
+(The server will run on port 5000).
+
+3. Frontend Setup
+
+The frontend is entirely contained in index.html.
+
+Simply open index.html in your browser, or host it using a simple live server (like VS Code Live Server).
+
+Important Configuration: At the bottom of index.html in the <script> tag, find const API_URL = 'http://localhost:5000/api';. If you deploy the backend to Render/Railway, change this URL to your deployed server's URL.
+
+Admin Dashboard Access
+
+URL: Click "Admin Login" in the footer.
+
+Default Email: naropilchildrenfoundation@gmail.com
+
+Default Password: admin123 (Change this via database or build an update password endpoint before production).
+
+Deployment Recommendations
+
+Frontend: Deploy index.html on Netlify, Vercel, or GitHub Pages.
+
+Backend: Deploy server.js on Render, Railway, or an AWS/DigitalOcean VPS.
+
+Database: Use a managed MySQL service like Aiven, PlanetScale (if adjusting MySQL syntax), or Railway MySQL.
